@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Insurance Fraud Intelligence System</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1f4037, #99f2c8);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: auto;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 38px;
+            font-weight: 700;
+        }
+
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0px 15px 40px rgba(0,0,0,0.2);
+            margin-bottom: 40px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 14px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            font-size: 15px;
+            transition: 0.3s;
+        }
+
+        .form-group input:focus {
+            border-color: #1f4037;
+            outline: none;
+            box-shadow: 0 0 8px rgba(31,64,55,0.3);
+        }
+
+        .btn {
+            padding: 14px 28px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .btn-primary {
+            background: #1f4037;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #16322c;
+        }
+
+        .btn-danger {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .btn-success {
+            background: #2ecc71;
+            color: white;
+        }
+
+        .result-section {
+            display: none;
+            animation: fadeIn 0.6s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {opacity: 0; transform: translateY(20px);}
+            to {opacity: 1; transform: translateY(0);}
+        }
+
+        .progress-bar {
+            width: 100%;
+            background: #eee;
+            border-radius: 20px;
+            overflow: hidden;
+            height: 25px;
+            margin-top: 15px;
+        }
+
+        .progress {
+            height: 100%;
+            width: 0%;
+            text-align: center;
+            line-height: 25px;
+            color: white;
+            font-weight: bold;
+            transition: width 1s ease-in-out;
+        }
+
+        .risk-badge {
+            padding: 8px 18px;
+            border-radius: 30px;
+            color: white;
+            font-weight: 600;
+            display: inline-block;
+            margin-top: 15px;
+        }
+
+        .actions {
+            margin-top: 25px;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        @media(max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <div class="header">
+        <h1><i class="fa-solid fa-shield-halved"></i> Insurance Fraud Intelligence System</h1>
+    </div>
+
+    <!-- FORM CARD -->
+    <div class="card">
+        <form method="POST" action="/predict">
+
+            <div class="form-grid">
+                <div class="form-group"><input type="number" name="months_as_customer" placeholder="Months as Customer" required></div>
+                <div class="form-group"><input type="number" name="age" placeholder="Customer Age" required></div>
+                <div class="form-group"><input type="number" name="policy_annual_premium" placeholder="Policy Annual Premium" required></div>
+                <div class="form-group"><input type="number" name="umbrella_limit" placeholder="Umbrella Limit" required></div>
+                <div class="form-group"><input type="number" name="total_claim_amount" placeholder="Total Claim Amount" required></div>
+                <div class="form-group"><input type="number" name="injury_claim" placeholder="Injury Claim" required></div>
+                <div class="form-group"><input type="number" name="property_claim" placeholder="Property Claim" required></div>
+                <div class="form-group"><input type="number" name="vehicle_claim" placeholder="Vehicle Claim" required></div>
+            </div>
+
+            <br>
+            <center>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fa-solid fa-magnifying-glass"></i> Analyze Claim
+                </button>
+            </center>
+
+        </form>
+    </div>
+
+    {% if prediction is defined %}
+
+    <!-- RESULT CARD -->
+    <div class="card result-section" id="resultSection">
+
+        <h2>Fraud Analysis Report</h2>
+
+        <h3>Fraud Probability: {{ probability }}%</h3>
+
+        <div class="progress-bar">
+            <div class="progress" id="progressBar"></div>
+        </div>
+
+        <div id="riskBadge" class="risk-badge"></div>
+
+        <div class="actions">
+            <a href="/download_pdf" class="btn btn-success">
+                <i class="fa-solid fa-file-pdf"></i> Download PDF Report
+            </a>
+
+            <a href="/investigation" class="btn btn-danger">
+                <i class="fa-solid fa-user-secret"></i> Raise Investigation
+            </a>
+        </div>
+
+    </div>
+
+    <script>
+        window.onload = function() {
+
+            const probability = {{ probability }};
+            const progressBar = document.getElementById("progressBar");
+            const riskBadge = document.getElementById("riskBadge");
+
+            progressBar.style.width = probability + "%";
+            progressBar.innerHTML = probability + "%";
+
+            if (probability < 40) {
+                progressBar.style.background = "#2ecc71";
+                riskBadge.style.background = "#2ecc71";
+                riskBadge.innerHTML = "Low Risk";
+            } 
+            else if (probability < 70) {
+                progressBar.style.background = "#f39c12";
+                riskBadge.style.background = "#f39c12";
+                riskBadge.innerHTML = "Medium Risk";
+            } 
+            else {
+                progressBar.style.background = "#e74c3c";
+                riskBadge.style.background = "#e74c3c";
+                riskBadge.innerHTML = "High Risk - Investigation Required";
+            }
+
+            document.getElementById("resultSection").style.display = "block";
+
+            document.getElementById("resultSection")
+                .scrollIntoView({ behavior: "smooth" });
+        }
+    </script>
+
+    {% endif %}
+
+</div>
+
+</body>
+</html>

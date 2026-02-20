@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Insurance Fraud Detection System</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(rgba(0,0,0,0.75), rgba(0,0,0,0.75)),
+            url("https://images.unsplash.com/photo-1556742049-0cfed4f6a45d") 
+            no-repeat center center/cover;
+            color: white;
+        }
+
+        nav {
+            display: flex;
+            justify-content: flex-end;
+            padding: 20px 60px;
+            background: rgba(0,0,0,0.7);
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin-left: 30px;
+            font-weight: 500;
+            transition: 0.3s;
+        }
+
+        nav a:hover {
+            color: #f9a826;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 120px 20px 60px 20px;
+        }
+
+        .hero h1 {
+            font-size: 45px;
+            margin-bottom: 20px;
+        }
+
+        .hero p {
+            font-size: 18px;
+            width: 60%;
+            margin: auto;
+            line-height: 1.6;
+        }
+
+        .btn {
+            display: inline-block;
+            margin-top: 30px;
+            background: #f9a826;
+            padding: 12px 25px;
+            color: black;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .btn:hover {
+            background: white;
+            transform: scale(1.05);
+        }
+
+        .features {
+            display: flex;
+            justify-content: center;
+            margin: 60px 0;
+            gap: 40px;
+            flex-wrap: wrap;
+        }
+
+        .feature-box {
+            background: rgba(255,255,255,0.1);
+            padding: 30px;
+            width: 250px;
+            border-radius: 10px;
+            text-align: center;
+            backdrop-filter: blur(5px);
+        }
+
+        .feature-box h3 {
+            margin-bottom: 15px;
+            color: #f9a826;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 60px;
+            padding: 40px 0;
+            background: rgba(0,0,0,0.6);
+            flex-wrap: wrap;
+        }
+
+        .stat-box {
+            text-align: center;
+        }
+
+        .stat-box h2 {
+            font-size: 35px;
+            color: #f9a826;
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <nav>
+        <a href="/">Home</a>
+        <a href="/about">About</a>
+        <a href="/predict">Predict</a>
+        <a href="/contact">Contact</a>
+    </nav>
+
+    <section class="hero">
+        <h1>AI-Powered Insurance Fraud Detection System</h1>
+        <p>
+            Our intelligent system analyzes insurance claim data using 
+            advanced machine learning algorithms to detect fraudulent 
+            activities and minimize financial risk.
+        </p>
+        <a href="predict.html" class="btn">Start Fraud Analysis</a>
+    </section>
+
+    <section class="features">
+        <div class="feature-box">
+            <h3>Fraud Risk Analysis</h3>
+            <p>Detect suspicious claim patterns using trained ML models.</p>
+        </div>
+
+        <div class="feature-box">
+            <h3>Real-Time Prediction</h3>
+            <p>Instant fraud prediction based on user input data.</p>
+        </div>
+
+        <div class="feature-box">
+            <h3>Data Pattern Detection</h3>
+            <p>Analyze historical claims to identify hidden fraud trends.</p>
+        </div>
+    </section>
+
+    <section class="stats">
+        <div class="stat-box">
+            <h2>95%</h2>
+            <p>Detection Accuracy</p>
+        </div>
+
+        <div class="stat-box">
+            <h2>10,000+</h2>
+            <p>Claims Analyzed</p>
+        </div>
+
+        <div class="stat-box">
+            <h2>Secure</h2>
+            <p>Data Processing</p>
+        </div>
+    </section>
+
+</body>
+</html>
