@@ -46,7 +46,7 @@ for col in df.select_dtypes(include="object").columns:
     label_encoders[col] = le
 
 # ------------------------------------------
-# 2. MODEL COMPARISON (Optional Analysis)
+# 2. MODEL COMPARISON 
 # ------------------------------------------
 X = df.drop("fraud_reported", axis=1)
 y = df["fraud_reported"]
