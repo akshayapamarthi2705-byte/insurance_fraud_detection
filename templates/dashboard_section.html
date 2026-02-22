@@ -30,13 +30,6 @@
         </div>
     </div>
 
-    <div style="margin-top: 36px; padding: 28px; background: rgba(15, 23, 42, 0.6); border-radius: 16px; border: 1px solid rgba(212, 175, 55, 0.12);">
-        <h3 style="color: #d4af37; font-size: 18px; margin-bottom: 16px; font-weight: 700;"><i class="fa-solid fa-lightbulb"></i> Explainable AI Insights</h3>
-        <ul style="color: #e2e8f0; margin-left: 24px; line-height: 2; font-size: 15px;">
-            <li>Warning: High claim-to-premium ratio - Suspicious pattern detected</li>
-            <li>Standard claim pattern</li>
-        </ul>
-    </div>
 </div>
 
 <script>
@@ -131,6 +124,9 @@
     if (btn) btn.addEventListener('click', ()=>{ createModal(); });
 
     const probVal = {{ probability|default('null') }};
+    const lowUpper = Number({{ (risk_thresholds.low_upper if risk_thresholds is defined else 40)|tojson }});
+    const highLower = Number({{ (risk_thresholds.high_lower if risk_thresholds is defined else 70)|tojson }});
+    const riskFromBackend = {{ (risk if risk is defined else '')|tojson }};
     if (probVal !== null) {
         const gaugeArc = document.getElementById('gaugeArcFg');
         const gaugeNeedle = document.getElementById('gaugeNeedle');
@@ -155,12 +151,26 @@
 
                 gaugeValue.innerHTML = prob + '%';
 
-                const color = prob < 40 ? '#22c55e' : (prob < 70 ? '#f59e0b' : '#ef4444');
-                if (prob < 40) {
+                const color = prob < lowUpper ? '#22c55e' : (prob < highLower ? '#f59e0b' : '#ef4444');
+                if (riskFromBackend) {
+                    if (riskFromBackend.toLowerCase().startsWith('low')) {
+                        badge.style.background = 'rgba(34, 197, 94, 0.25)';
+                        badge.style.color = '#22c55e';
+                        badge.innerHTML = 'Low Risk';
+                    } else if (riskFromBackend.toLowerCase().startsWith('high')) {
+                        badge.style.background = 'rgba(239, 68, 68, 0.25)';
+                        badge.style.color = '#ef4444';
+                        badge.innerHTML = 'High Risk - Investigation Required';
+                    } else {
+                        badge.style.background = 'rgba(245, 158, 11, 0.25)';
+                        badge.style.color = '#f59e0b';
+                        badge.innerHTML = 'Medium Risk';
+                    }
+                } else if (prob < lowUpper) {
                     badge.style.background = 'rgba(34, 197, 94, 0.25)';
                     badge.style.color = '#22c55e';
                     badge.innerHTML = 'Low Risk';
-                } else if (prob < 70) {
+                } else if (prob < highLower) {
                     badge.style.background = 'rgba(245, 158, 11, 0.25)';
                     badge.style.color = '#f59e0b';
                     badge.innerHTML = 'Medium Risk';

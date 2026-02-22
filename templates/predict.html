@@ -149,6 +149,11 @@
         <div class="card">
             <h2><i class="fa-solid fa-magnifying-glass-chart"></i> Insurance Fraud Analysis</h2>
             <p>Enter claim details below. All monetary values in Indian Rupees (Rs.).</p>
+            {% if error %}
+                <div style="margin: 0 0 20px; padding: 14px 16px; border-radius: 10px; background: rgba(239, 68, 68, 0.16); border: 1px solid rgba(239, 68, 68, 0.45); color: #fecaca;">
+                    <i class="fa-solid fa-triangle-exclamation"></i> {{ error }}
+                </div>
+            {% endif %}
 
             <form action="/analyze" method="POST">
                 <div class="form-grid">
@@ -223,9 +228,6 @@
             {% if probability is defined %}
                 {% include 'dashboard_section.html' %}
             {% endif %}
-        </div>
-    </div>
-
     <script>
         window.addEventListener('load', function(){
             const probability = {{ probability|default('null') }};
@@ -280,5 +282,8 @@
             }
         });
     </script>
+        </div>
+    </div>
+
 </body>
 </html>
